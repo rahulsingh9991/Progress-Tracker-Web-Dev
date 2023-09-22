@@ -23,7 +23,7 @@
         }
 
         body {
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg');
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://img.freepik.com/free-photo/old-black-background-grunge-texture-dark-wallpaper-blackboard-chalkboard-room-wall_1258-28313.jpg');
             background-position: center;
             background-size: cover;
         }
@@ -31,24 +31,38 @@
         h1 {
             font-weight: bold;
         }
-
+        .heading{
+            text-decoration: rgb(255, 0, 0);
+            text-decoration-color: black;
+        }
         .order {
-            width: 500px;
+            width: 45%;
             margin: 60px auto 0px auto;
             padding-bottom: 60px;
         }
-
-        .mybtn {
-            width: 100%;
+        .heading-class{
+            text-align: center;
         }
+        .close-save{
+            text-align: center;
 
+        }
         .order > table {
             margin : 10px 0;
             font-size: 18px;
         }
-        /* .inline-box{
-            display: inline-block;
-        } */
+        .order-info{
+            display: none;
+            margin: 20px 0;
+
+        }
+        .input-group-text{
+            background-color: rgb(209, 218, 226);
+            
+            text-decoration: solid;
+            font-weight: bold;
+        }
+        
         .box{
             text-align: end;
             margin: 5px;
@@ -62,6 +76,12 @@
         $(document).ready(function () {
             show_orders();
         });
+        function open_box(){
+            $('#order-info-id').show()
+        }
+        function close_box(){
+            $('#order-info-id').hide()
+        }
         function solved_status(num){
             $.ajax(
                 {
@@ -112,10 +132,10 @@
                     let stotal=response['stotal']
                     let utotal=response['utotal']
                     let html_1=`
-                    <div class="inline-box">Total : ${ctotal}</div>
-                    <div class="inline-box">Unsolved : ${utotal}</div>
-                    <div class="inline-box">Solved : ${stotal}</div>
                     
+                    <div class="inline-box">Left : ${utotal}</div>
+                    <div class="inline-box">Completed : ${stotal}</div>
+                    <div class="inline-box">Total : ${ctotal}</div>
                     `
                     $('#After-form').append(html_1)
                     for(let i=0;i<list.length;i++){
@@ -130,8 +150,9 @@
                                 <tr>
                                     <th scope="col"><a href="${link}">${problem}</a></th>
                                     <th scope="col">${difficulty}</th>
-                                    <th scope="col"><button onclick="solved_status(${num})" type="button" class="btn btn-outline-primary">Mark As Solved</button></th>
+                                    <th scope="col">Not Done</th>
                                     <th scope="col"><button onclick="delete_record(${num})" type="button" class="btn btn-outline-danger">Delete</button></th>
+                                    <th scope="col"><button onclick="solved_status(${num})" type="button" class="btn btn-outline-success">Mark As Solved</button></th>
                                 </tr>
                         `;
                         }
@@ -140,8 +161,9 @@
                                 <tr>
                                     <th scope="col"><a href="${link}">${problem}</a></th>
                                     <th scope="col">${difficulty}</th>
-                                    <th scope="col"><button onclick="unsolved_status(${num})" type="button" class="btn btn-outline-primary">Mark As UnSolved</button></th>
+                                    <th scope="col">Done</th>
                                     <th scope="col"><button onclick="delete_record(${num})" type="button" class="btn btn-outline-danger">Delete</button></th>
+                                    <th scope="col"><button onclick="unsolved_status(${num})" type="button" class="btn btn-success">Mark As UnSolved</button></th>
                                 </tr>
                         `;
 
@@ -173,12 +195,13 @@
 <body>
     <div class="mask"></div>
     <div class="order">
-        <h1>Progress Tracker </h1>
-        <h3>Ready to Code....</h3>
-        <p>
-           Eat... Sleep.... Code....
-        </p>
-        <div class="order-info">
+        <div class="heading-class">
+        <h1 class="heading">Progress Tracker </h1>
+        <button onclick="open_box()" type="button" class="btn btn-warning">Click to Add an item to the list</button>
+        </div>
+        
+        
+        <div class="order-info" id="order-info-id">
             <div class="input-group mb-3">
                 <span class="input-group-text">Problem Statement</span>
                 <input id="name" type="text" class="form-control">
@@ -194,12 +217,14 @@
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
                   <option value="Hard">Hard</option>
-                  <!-- <option value="40">40 acres</option> -->
-                  <!-- <option value="50">50 acres</option> -->
                 </select>
               </div>
-              <button onclick="save_order()" type="button" class="btn btn-warning mybtn">Save</button>
-        </div>
+              <div class="close-save">
+                <button onclick="save_order()" type="button" class="btn btn-success">Save</button>
+              <button onclick="close_box()" type="button" class="btn btn-danger">Close</button>
+              </div>
+              
+            </div>
         <div id="After-form" class="box"></div>
         <table class="table">
             <thead>
@@ -207,26 +232,11 @@
                 <th scope="col">Problem</th>
                 <th scope="col">Difficulty</th>
                 <th scope="col">Status</th>
-                <th scope="col"></th>
+                <th scope="col">Delete</th>
+                <th scope="col">Convert</th>
               </tr>
             </thead>
             <tbody id="t-body">
-              <tr>
-                <th scope="col">1</th>
-                <td>Jim</td>
-                <td>100 Downing St.</td>
-                <td>20 acres</td>
-              </tr>
-              <!-- <tr>
-                <td>Bob</td>
-                <td>856 Peterson Ave.</td>
-                <td>10 acres</td>
-              </tr>
-              <tr>
-                <td>Steve</td>
-                <td>212 Baker St.</td>
-                <td>30 acres</td>
-              </tr> -->
             </tbody>
           </table>
     </div>
